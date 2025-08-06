@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BINDLCORP Dating Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #111111 0%, #1e1e1e 50%, #111111 100%);
+            border: 1px solid #333333;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333333 50%, #1a1a1a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #333333;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .bindl-tag {
+            font-size: 0.75em;
+            opacity: 0.7;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.0em;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid #333333;
+        }
+        
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        .form-container {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #ffffff;
+            font-size: 0.9em;
+        }
+        
+        .form-group select,
+        .form-group textarea,
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #333333;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #1a1a1a;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-group select:focus,
+        .form-group textarea:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #666666;
+            background: #222222;
+        }
+        
+        .form-group select option {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #333333, #555555);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            font-family: inherit;
+        }
+        
+        .generate-btn:hover {
+            background: linear-gradient(135deg, #444444, #666666);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #cccccc;
+        }
+        
+        .spinner {
+            border: 3px solid #333333;
+            border-top: 3px solid #ffffff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result-container {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            border: 1px solid #333333;
+        }
+        
+        .chat-bubble {
+            background: linear-gradient(135deg, #2a2a2a, #333333);
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 20px 5px;
+            margin: 20px 0;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+            line-height: 1.4;
+        }
+        
+        .chat-bubble.unhinged {
+            border: 1px solid #dc2626;
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.2);
+        }
+        
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -5px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: #333333;
+            border-bottom: 0;
+            border-left: 0;
+            margin-bottom: -10px;
+        }
+        
+        .chat-bubble.unhinged::after {
+            border-right-color: #dc2626;
+        }
+        
+        .copy-btn {
+            background: #555555;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .copy-btn:hover {
+            background: #666666;
+        }
+        
+        .testimonials {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            padding: 40px;
+            margin-top: 40px;
+            border-top: 1px solid #333333;
+        }
+        
+        .testimonial {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #333333;
+        }
+        
+        .testimonial-author {
+            font-weight: 500;
+            color: #cccccc;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .disclaimer {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            text-align: center;
+            color: #ffffff;
+        }
+        
+        .disclaimer strong {
+            color: #ef4444;
+        }
+        
+        .rainbow-text {
+            background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow 3s ease-in-out infinite;
+        }
+        
+        @keyframes rainbow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .gay-mode-indicator {
+            background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #0080ff, #8000ff, #ff00ff);
+            background-size: 200% 200%;
+            animation: rainbow 3s ease-in-out infinite;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .container {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BINDLCORP</h1>
+            <div class="bindl-tag">Dating Intelligence System</div>
+            <p>Your AI-powered dating wing-person that never fails</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">50K+</div>
+                    <div>Messages Generated</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">94%</div>
+                    <div>Success Rate</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="activeUsers">347</div>
+                    <div>Users Online</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; border-left: 3px solid #ffffff;">
+                <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 5px;">Dating Tip</div>
+                <div id="randomTip" style="font-style: italic;">Loading tip...</div>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <form id="messageForm">
+                <div class="form-group">
+                    <label for="yourGender">Your Gender</label>
+                    <select id="yourGender" required>
+                        <option value="">Select your gender...</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="non_binary">Non-binary</option>
+                        <option value="prefer_not_say">Prefer not to say</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="theirGender">Their Gender</label>
+                    <select id="theirGender" required>
+                        <option value="">Select their gender...</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="non_binary">Non-binary</option>
+                        <option value="any">Any/All</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="platform">Dating Platform</label>
+                    <select id="platform" required>
+                        <option value="">Select platform...</option>
+                        <option value="tinder">Tinder</option>
+                        <option value="hinge">Hinge</option>
+                        <option value="bumble">Bumble</option>
+                        <option value="okcupid">OkCupid</option>
+                        <option value="match">Match.com</option>
+                        <option value="pof">Plenty of Fish</option>
+                        <option value="elite_singles">EliteSingles</option>
+                        <option value="eharmony">eHarmony</option>
+                        <option value="zoosk">Zoosk</option>
+                        <option value="coffee_meets_bagel">Coffee Meets Bagel</option>
+                        <option value="the_league">The League</option>
+                        <option value="raya">Raya</option>
+                        <option value="farmers_only">FarmersOnly</option>
+                        <option value="christian_mingle">ChristianMingle</option>
+                        <option value="jdate">JDate</option>
+                        <option value="muslima">Muslima</option>
+                        <option value="silversingles">SilverSingles</option>
+                        <option value="ourtime">OurTime</option>
+                        <option value="grindr">Grindr</option>
+                        <option value="her">HER</option>
+                        <option value="taimi">Taimi</option>
+                        <option value="blued">Blued</option>
+                        <option value="scruff">Scruff</option>
+                        <option value="jackd">Jack'd</option>
+                        <option value="hornet">Hornet</option>
+                        <option value="adam4adam">Adam4Adam</option>
+                        <option value="surge">Surge</option>
+                        <option value="growlr">Growlr</option>
+                        <option value="crypto_hearts">CryptoHearts</option>
+                        <option value="conspiracy_cupid">ConspiracyCupid</option>
+                        <option value="bindl_connect">BINDL Connect</option>
+                        <option value="influencer_match">InfluencerMatch</option>
+                        <option value="gamer_love">GamerLove</option>
+                        <option value="fitness_singles">FitnessSingles</option>
+                        <option value="bookworm_dating">BookwormDating</option>
+                        <option value="foodie_finder">FoodieFinder</option>
+                        <option value="travel_buddies">TravelBuddies</option>
+                        <option value="pet_lovers_unite">PetLoversUnite</option>
+                        <option value="vinyl_vibes">VinylVibes</option>
+                        <option value="craft_beer_connect">CraftBeerConnect</option>
+                        <option value="startup_spark">StartupSpark</option>
+                        <option value="netflix_and_chill">NetflixAndChill</option>
+                        <option value="plant_parent_plus">PlantParentPlus</option>
+                        <option value="true_crime_hearts">TrueCrimeHearts</option>
+                        <option value="astrology_align">AstrologyAlign</option>
+                        <option value="minimalist_match">MinimalistMatch</option>
+                        <option value="dms">Instagram/Social DMs</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="personality">Your Personality</label>
+                    <select id="personality" required>
+                        <option value="">Select your vibe...</option>
+                        <option value="funny">Funny & Playful</option>
+                        <option value="smooth">Smooth & Confident</option>
+                        <option value="genuine">Genuine & Thoughtful</option>
+                        <option value="witty">Witty & Clever</option>
+                        <option value="adventurous">Adventurous & Bold</option>
+                        <option value="romantic">Romantic & Sweet</option>
+                        <optgroup label="⚠️ UNHINGED MODES ⚠️">
+                            <option value="chaotic">Chaotic Neutral</option>
+                            <option value="unhinged">Completely Unhinged</option>
+                            <option value="crackhead">Crackhead Energy</option>
+                            <option value="alien">Alien Investigator</option>
+                            <option value="serial_killer">Serial Killer Vibes</option>
+                            <option value="time_traveler">Time Traveler</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="target">Who are you messaging?</label>
+                    <select id="target" required>
+                        <option value="">Choose your match...</option>
+                        <option value="creative">Creative/Artistic type</option>
+                        <option value="professional">Career-focused</option>
+                        <option value="outdoorsy">Outdoorsy/Athletic</option>
+                        <option value="intellectual">Intellectual/Bookworm</option>
+                        <option value="party">Social butterfly</option>
+                        <option value="homebody">Homebody/Cozy vibes</option>
+                        <option value="foodie">Foodie/Culinary enthusiast</option>
+                        <option value="traveler">Travel lover</option>
+                        <option value="gamer">Gaming enthusiast</option>
+                        <option value="fitness">Fitness fanatic</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appearance">Their Appearance (Optional)</label>
+                    <select id="appearance">
+                        <option value="">Not specified...</option>
+                        <option value="blue_eyes">Beautiful blue eyes</option>
+                        <option value="brown_eyes">Gorgeous brown eyes</option>
+                        <option value="green_eyes">Striking green eyes</option>
+                        <option value="great_smile">Amazing smile</option>
+                        <option value="very_fit">Very fit/athletic build</option>
+                        <option value="curvy">Curvy/full figured</option>
+                        <option value="thick">Thick/curvy in all the right places</option>
+                        <option value="slim">Slim/petite frame</option>
+                        <option value="tall">Tall</option>
+                        <option value="short">Short/petite</option>
+                        <option value="model_tier">Model-level gorgeous</option>
+                        <option value="above_average">Above average looking</option>
+                        <option value="natural_beauty">Natural beauty</option>
+                        <option value="blonde">Beautiful blonde</option>
+                        <option value="brunette">Gorgeous brunette</option>
+                        <option value="redhead">Stunning redhead</option>
+                        <option value="indiana_8">Indiana 8</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="context">Additional Context (Optional)</label>
+                    <textarea id="context" placeholder="Paste their bio, a previous message, or describe the situation..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="messageType">Message Type</label>
+                    <select id="messageType" required>
+                        <option value="opener">First Message</option>
+                        <option value="response">Reply to them</option>
+                        <option value="followup">Follow-up message</option>
+                        <option value="comeback">Witty comeback</option>
+                        <option value="escalate">Escalate the conversation</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="generate-btn">
+                    Generate Message
+                </button>
+            </form>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Connecting to AI system...</p>
+            </div>
+            
+            <div class="result-container" id="result">
+                <h3>Your AI-Generated Message:</h3>
+                <div class="gay-mode-indicator" id="gayModeIndicator" style="display: none;">
+                    🌈 gAy-I MODE ACTIVATED 🌈
+                </div>
+                <div class="chat-bubble" id="generatedMessage">
+                    <!-- AI-generated message will appear here -->
+                </div>
+                <button class="copy-btn" id="copyBtn">📋 Copy Message</button>
+                <div class="disclaimer" id="disclaimer" style="display: none;">
+                    <strong>⚠️ WARNING:</strong> This message was generated in unhinged mode. Results may include unexpected consequences, confused matches, or viral screenshots. BINDLCORP is not responsible for any dates, marriages, restraining orders, or FBI investigations that may result.
+                </div>
+            </div>
+        </div>
+        
+        <div class="testimonials">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #ffffff;">User Reviews</h2>
+            
+            <div class="testimonial">
+                <p>"I used the serial killer vibes mode as a joke and she asked if I was writing a Netflix series. We're discussing the plot over dinner tomorrow."</p>
+                <div class="testimonial-author">- Anonymous User</div>
+            </div>
+            
+            <div class="testimonial">
+                <p>"The time traveler mode got me a response rate of 90%. Apparently telling someone you're from 2045 and need to warn them about something urgent is irresistible."</p>
+                <div class="testimonial-author">- TimeWarp_Dating</div>
+            </div>
+            
+            <div class="testimonial">
+                <p>"Crackhead energy setting literally broke Tinder. My match said it was the most unhinged opener she'd ever received and she loved it. We're engaged now."</p>
+                <div class="testimonial-author">- CrackedTheCode</div>
+            </div>
+            
+            <div class="testimonial">
+                <p>"I was skeptical about the alien investigator mode until someone responded with 'finally, another one of us.' I think I found my person."</p>
+                <div class="testimonial-author">- NotFromEarth</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Random tips and statistics that rotate on page load
+        const datingTips = [
+            "Messages with questions get 15% more responses than statements",
+            "Photos with genuine smiles get 23% more matches than posed shots",
+            "Tuesday at 9pm has the highest response rate on dating apps",
+            "Mentioning specific details from their profile increases response rates by 30%",
+            "Humor beats pickup lines - funny messages get 3x more replies",
+            "People are 40% more likely to respond to messages under 60 characters",
+            "Messages sent between 8-10pm get the most responses",
+            "Using their name in a message increases reply rates by 20%",
+            "Asking about their interests gets better responses than complimenting appearance",
+            "Messages with emojis get 25% fewer responses from people over 30",
+            "Sunday has the lowest competition - fewer people messaging",
+            "People swipe fastest between 6-9pm on weekdays",
+            "References to shared interests increase match quality by 45%",
+            "Open-ended questions work better than yes/no questions",
+            "Confidence is 67% more attractive than modesty in opening messages"
+        ];
+        
+        // Set random tip on page load
+        function setRandomTip() {
+            const tipElement = document.getElementById('randomTip');
+            if (tipElement) {
+                tipElement.textContent = datingTips[Math.floor(Math.random() * datingTips.length)];
+            }
+        }
+        
+        document.getElementById('messageForm').addEventListener('submit', async function(e) {
+        
+        // Update active users counter with random fluctuation
+        function updateActiveUsers() {
+            const minUsers = 89;
+            const maxUsers = 847;
+            const newCount = Math.floor(Math.random() * (maxUsers - minUsers + 1)) + minUsers;
+            document.getElementById('activeUsers').textContent = newCount;
+        }
+        
+        // Update every 8-25 seconds for more realistic feel
+        setInterval(updateActiveUsers, Math.random() * 17000 + 8000);
+        
+        // Set initial random count on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setRandomTip();
+            updateActiveUsers();
+        });
+            e.preventDefault();
+            
+            const yourGender = document.getElementById('yourGender').value;
+            const theirGender = document.getElementById('theirGender').value;
+            const platform = document.getElementById('platform').value;
+            const personality = document.getElementById('personality').value;
+            const target = document.getElementById('target').value;
+            const appearance = document.getElementById('appearance').value;
+            const messageType = document.getElementById('messageType').value;
+            const context = document.getElementById('context').value;
+            
+            if (!yourGender || !theirGender || !platform) {
+                alert('Please select your gender, their gender, and the platform to generate the best message');
+                return;
+            }
+            
+            // Check for same-sex combinations (gAy-I mode)
+            const isGayMode = (yourGender === theirGender) || 
+                             (yourGender === 'male' && theirGender === 'male') || 
+                             (yourGender === 'female' && theirGender === 'female');
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            // This is where you'll connect to your backend API
+            // For now, showing placeholder behavior
+            setTimeout(() => {
+                const messageElement = document.getElementById('generatedMessage');
+                const disclaimerElement = document.getElementById('disclaimer');
+                const gayModeElement = document.getElementById('gayModeIndicator');
+                
+                // Placeholder message - replace with actual API call
+                let message = "This will be replaced with your OpenAI API integration. The backend will receive all form data and generate personalized messages based on the selected parameters.";
+                
+                messageElement.textContent = message;
+                
+                // Handle gay mode styling
+                if (isGayMode) {
+                    messageElement.classList.add('rainbow-text');
+                    gayModeElement.style.display = 'block';
+                } else {
+                    messageElement.classList.remove('rainbow-text');
+                    gayModeElement.style.display = 'none';
+                }
+                
+                // Add special styling and warning for unhinged modes
+                if (['chaotic', 'unhinged', 'crackhead', 'alien', 'serial_killer', 'time_traveler'].includes(personality)) {
+                    messageElement.classList.add('unhinged');
+                    disclaimerElement.style.display = 'block';
+                } else {
+                    messageElement.classList.remove('unhinged');
+                    disclaimerElement.style.display = 'none';
+                }
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+                
+                // Scroll to result
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        });
+        
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const message = document.getElementById('generatedMessage').textContent;
+            navigator.clipboard.writeText(message).then(() => {
+                this.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    this.textContent = '📋 Copy Message';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
