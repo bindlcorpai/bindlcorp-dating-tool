@@ -25,28 +25,43 @@ export default async function handler(req, res) {
       context 
     } = req.body;
 
-    // Build the AI prompt
-    let prompt = `Generate a ${personality} dating message for ${platform}.
+    // Build more natural prompt
+    let prompt = `Generate a short, casual dating message (max 25 words) for ${platform}.
 
-Context:
-- Your gender: ${yourGender}
-- Their gender: ${theirGender}  
-- Their type: ${target}
-- Their appearance: ${appearance || 'not specified'}
-- Message type: ${messageType}
-- Additional context: ${context || 'none'}
+You are: ${yourGender} with ${personality} personality
+Messaging: ${target} person who is ${theirGender}
+${appearance ? `They have: ${appearance}` : ''}
+Message type: ${messageType}
+${context ? `Context: ${context}` : ''}
 
-Generate a ${personality} style message that's appropriate for ${platform}. 
-Keep it under 100 words, no emojis, and make it sound natural and engaging.`;
+Requirements:
+- Max 25 words
+- Sound like a normal person texting
+- No fancy words like "wanderer" or "fellow"
+- Be ${personality} but natural
+- Reference THEIR appearance if mentioned, not yours
+- Keep it conversational and modern`;
 
-    // Add special instructions for unhinged modes
-    if (['chaotic', 'unhinged', 'crackhead', 'alien', 'serial_killer', 'time_traveler'].includes(personality)) {
-      prompt += '\nMake it boldly unconventional but still charming and funny.';
+    // Add personality-specific instructions
+    if (personality === 'funny') {
+      prompt += '\n- Be playful and humorous but not cheesy';
+    } else if (personality === 'smooth') {
+      prompt += '\n- Be confident but not over the top';
+    } else if (personality === 'genuine') {
+      prompt += '\n- Be sincere and authentic';
+    } else if (['chaotic', 'unhinged', 'crackhead'].includes(personality)) {
+      prompt += '\n- Be weird and unexpected but still charming';
+    } else if (personality === 'alien') {
+      prompt += '\n- Sound like you might be from another planet but trying to fit in';
+    } else if (personality === 'serial_killer') {
+      prompt += '\n- Be slightly ominous but clearly joking';
+    } else if (personality === 'time_traveler') {
+      prompt += '\n- Reference the future or past casually';
     }
 
     // Add gay mode instructions
     if (yourGender === theirGender) {
-      prompt += '\nAdjust tone for same-gender interaction with appropriate slang.';
+      prompt += '\n- Use appropriate same-gender dating language and slang';
     }
 
     // Call OpenAI API
@@ -61,15 +76,15 @@ Keep it under 100 words, no emojis, and make it sound natural and engaging.`;
         messages: [
           {
             role: 'system',
-            content: 'You are a dating message expert. Generate creative, engaging messages based on personality and context. Keep messages under 100 words and emoji-free. Be bold and creative, especially for unhinged modes.'
+            content: 'You generate short, casual dating messages. Sound like a real person texting, not a poet. Max 25 words. Be natural and conversational. Avoid flowery language.'
           },
           {
             role: 'user',
             content: prompt
           }
         ],
-        max_tokens: 150,
-        temperature: 0.8,
+        max_tokens: 60,
+        temperature: 0.7,
       }),
     });
 
@@ -79,7 +94,10 @@ Keep it under 100 words, no emojis, and make it sound natural and engaging.`;
       throw new Error(data.error?.message || 'API request failed');
     }
 
-    const message = data.choices[0].message.content.trim();
+    let message = data.choices[0].message.content.trim();
+    
+    // Remove quotes if AI adds them
+    message = message.replace(/^["']|["']$/g, '');
     
     res.status(200).json({ 
       success: true, 
