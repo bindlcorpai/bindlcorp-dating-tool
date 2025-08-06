@@ -678,15 +678,6 @@ try {
     alert('Error generating message: ' + error.message);
     console.error('Full error:', error);
 }}, 2000);
-        });
-        
-        document.getElementById('copyBtn').addEventListener('click', function() {
-            const message = document.getElementById('generatedMessage').textContent;
-            navigator.clipboard.writeText(message).then(() => {
-                this.textContent = '✅ Copied!';
-                setTimeout(() => {
-                    this.textContent = '📋 Copy Message';
-                }, 2000);
             });
         });
     </script>
