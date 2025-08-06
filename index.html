@@ -621,40 +621,63 @@
             
             // This is where you'll connect to your backend API
             // For now, showing placeholder behavior
-            setTimeout(() => {
-                const messageElement = document.getElementById('generatedMessage');
-                const disclaimerElement = document.getElementById('disclaimer');
-                const gayModeElement = document.getElementById('gayModeIndicator');
-                
-                // Placeholder message - replace with actual API call
-                let message = "This will be replaced with your OpenAI API integration. The backend will receive all form data and generate personalized messages based on the selected parameters.";
-                
-                messageElement.textContent = message;
-                
-                // Handle gay mode styling
-                if (isGayMode) {
-                    messageElement.classList.add('rainbow-text');
-                    gayModeElement.style.display = 'block';
-                } else {
-                    messageElement.classList.remove('rainbow-text');
-                    gayModeElement.style.display = 'none';
-                }
-                
-                // Add special styling and warning for unhinged modes
-                if (['chaotic', 'unhinged', 'crackhead', 'alien', 'serial_killer', 'time_traveler'].includes(personality)) {
-                    messageElement.classList.add('unhinged');
-                    disclaimerElement.style.display = 'block';
-                } else {
-                    messageElement.classList.remove('unhinged');
-                    disclaimerElement.style.display = 'none';
-                }
-                
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('result').style.display = 'block';
-                
-                // Scroll to result
-                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-            }, 2000);
+            setTimeout(() => {// Call your real API
+try {
+    const response = await fetch('/api/generate-message', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            yourGender,
+            theirGender,
+            platform,
+            personality,
+            target,
+            appearance,
+            messageType,
+            context
+        }),
+    });
+
+    const data = await response.json();
+    
+    if (data.success) {
+        const messageElement = document.getElementById('generatedMessage');
+        const disclaimerElement = document.getElementById('disclaimer');
+        const gayModeElement = document.getElementById('gayModeIndicator');
+        
+        messageElement.textContent = data.message;
+        
+        // Handle gay mode styling
+        if (isGayMode) {
+            messageElement.classList.add('rainbow-text');
+            gayModeElement.style.display = 'block';
+        } else {
+            messageElement.classList.remove('rainbow-text');
+            gayModeElement.style.display = 'none';
+        }
+        
+        // Handle unhinged disclaimer
+        if (['chaotic', 'unhinged', 'crackhead', 'alien', 'serial_killer', 'time_traveler'].includes(personality)) {
+            messageElement.classList.add('unhinged');
+            disclaimerElement.style.display = 'block';
+        } else {
+            messageElement.classList.remove('unhinged');
+            disclaimerElement.style.display = 'none';
+        }
+        
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    } else {
+        throw new Error(data.error || 'Generation failed');
+    }
+} catch (error) {
+    document.getElementById('loading').style.display = 'none';
+    alert('Error generating message: ' + error.message);
+    console.error('Full error:', error);
+}}, 2000);
         });
         
         document.getElementById('copyBtn').addEventListener('click', function() {
