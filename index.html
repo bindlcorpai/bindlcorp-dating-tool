@@ -436,30 +436,6 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="appearance">Their Appearance (Optional)</label>
-                    <select id="appearance">
-                        <option value="">Not specified...</option>
-                        <option value="blue_eyes">Beautiful blue eyes</option>
-                        <option value="brown_eyes">Gorgeous brown eyes</option>
-                        <option value="green_eyes">Striking green eyes</option>
-                        <option value="great_smile">Amazing smile</option>
-                        <option value="very_fit">Very fit/athletic build</option>
-                        <option value="curvy">Curvy/full figured</option>
-                        <option value="thick">Thick/curvy in all the right places</option>
-                        <option value="slim">Slim/petite frame</option>
-                        <option value="tall">Tall</option>
-                        <option value="short">Short/petite</option>
-                        <option value="model_tier">Model-level gorgeous</option>
-                        <option value="above_average">Above average looking</option>
-                        <option value="natural_beauty">Natural beauty</option>
-                        <option value="blonde">Beautiful blonde</option>
-                        <option value="brunette">Gorgeous brunette</option>
-                        <option value="redhead">Stunning redhead</option>
-                        <option value="indiana_8">Indiana 8</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
                     <label for="context">Additional Context (Optional)</label>
                     <textarea id="context" placeholder="Paste their bio, a previous message, or describe the situation..."></textarea>
                 </div>
@@ -504,23 +480,23 @@
             <h2 style="text-align: center; margin-bottom: 30px; color: #ffffff;">User Reviews</h2>
             
             <div class="testimonial">
-                <p>"I used the serial killer vibes mode as a joke and she asked if I was writing a Netflix series. We're discussing the plot over dinner tomorrow."</p>
-                <div class="testimonial-author">- Anonymous User</div>
+                <p>"This AI actually understands my sense of humor. My messages went from getting ignored to starting real conversations. Game changer."</p>
+                <div class="testimonial-author">- Jake M.</div>
             </div>
             
             <div class="testimonial">
-                <p>"The time traveler mode got me a response rate of 90%. Apparently telling someone you're from 2045 and need to warn them about something urgent is irresistible."</p>
-                <div class="testimonial-author">- TimeWarp_Dating</div>
+                <p>"The unhinged modes are hilarious but they work! Used chaotic neutral and got three dates this week. My friends think I hired a ghostwriter."</p>
+                <div class="testimonial-author">- Sarah K.</div>
             </div>
             
             <div class="testimonial">
-                <p>"Crackhead energy setting literally broke Tinder. My match said it was the most unhinged opener she'd ever received and she loved it. We're engaged now."</p>
-                <div class="testimonial-author">- CrackedTheCode</div>
+                <p>"I was terrible at opening lines. This tool gives me confidence to actually message people I'm interested in without overthinking it."</p>
+                <div class="testimonial-author">- Marcus R.</div>
             </div>
             
             <div class="testimonial">
-                <p>"I was skeptical about the alien investigator mode until someone responded with 'finally, another one of us.' I think I found my person."</p>
-                <div class="testimonial-author">- NotFromEarth</div>
+                <p>"The gAy-I mode gets my dating style perfectly. Finally, an AI that understands how gay people actually text each other."</p>
+                <div class="testimonial-author">- Alex T.</div>
             </div>
         </div>
     </div>
@@ -578,7 +554,6 @@
             const platform = document.getElementById('platform').value;
             const personality = document.getElementById('personality').value;
             const target = document.getElementById('target').value;
-            const appearance = document.getElementById('appearance').value;
             const messageType = document.getElementById('messageType').value;
             const context = document.getElementById('context').value;
             
@@ -609,7 +584,6 @@
                         platform,
                         personality,
                         target,
-                        appearance,
                         messageType,
                         context
                     }),
