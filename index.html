@@ -480,7 +480,7 @@
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p>Crafting the perfect message...</p>
+                <p>AI is crafting your perfect message...</p>
             </div>
             
             <div class="result-container" id="result">
@@ -506,194 +506,377 @@
     </div>
 
     <script>
-        // Comprehensive message generation system with multiple variations
-        const messageTemplates = {
+        // Message database
+        const messageDatabase = {
             opener: {
                 funny: {
                     creative: [
-                        "okay so I have a theory that all creative people secretly have a drawer full of abandoned projects. am I close?",
-                        "be honest - what percentage of your camera roll is just failed attempts at that one perfect shot?",
-                        "your vibe screams 'I make cool stuff and forget to eat' - how accurate is that?",
-                        "tell me you're an artist without telling me you're an artist... wait you already did with that profile",
-                        "creative types either sleep 3 hours or 13 hours, no in between. which camp you in?"
+                        "okay so theory time: all creatives have that one project they'll definitely finish someday. what's yours?",
+                        "your vibe says I create masterpieces at 3am fueled by pure chaos. accurate?",
+                        "be real - what percentage of your day is spent staring at a blank canvas/screen?",
+                        "creative types are either 3 hours of sleep or 13 hours, no in between. which are you?"
                     ],
                     professional: [
-                        "so what's worse - monday meetings or friday afternoon emails? there's only one right answer btw",
-                        "you give off major 'has their life together' energy. what's your secret?",
-                        "corporate warrior or secret rebel? your profile has me intrigued",
-                        "let me guess - you have a color-coded calendar and actually use it?",
-                        "linkedin influencer or quietly crushing it? either way I'm impressed"
+                        "corporate baddie or secretly counting down to friday? no judgment either way",
+                        "your profile screams success but I need to know - are you a morning person? dealbreaker potential",
+                        "ambitious AND attractive? the economy isn't ready for you",
+                        "let me guess - color coded calendar, meal prep sundays, still chaos. am I close?"
                     ],
                     player: [
                         "your profile screams trouble and I'm apparently into that. what's your damage?",
                         "so are you gonna break my heart professionally or is this more of a hobby thing?",
-                        "I can fix you. kidding, but seriously what's your deal?"
+                        "red flags looking like a carnival but here I am. convince me it's worth it"
                     ],
                     parent: [
-                        "single parent? respect. how do you have time for this app between snacks and bedtime?",
-                        "kids in the pics means you're honest. that's rare here. what age are we talking?",
+                        "single parent? automatic respect. how do you have time for this app between snacks and bedtime?",
+                        "kids in the pics means you're honest. that's rare here. what age chaos are we talking?",
                         "parent life + dating apps = you're braver than any superhero. how's that working out?"
-                    ],
-                    slacker: [
-                        "your energy is immaculate. by which I mean nonexistent. same honestly",
-                        "finally someone else who peaked in high school. wanna not try together?",
-                        "your bio says 'just vibing' and honestly? mood. what's your secret to caring less?"
                     ]
                 },
                 smooth: {
                     creative: [
                         "your creative energy is magnetic. what's been inspiring you lately?",
-                        "I can tell you see the world differently. what caught your eye today?",
-                        "there's something about creative souls that just hits different. what's your medium?"
+                        "there's something about how you see the world. what caught your eye today?",
+                        "artists notice things others miss. what do you see that we don't?"
                     ],
                     professional: [
-                        "ambitious and attractive - dangerous combination. what drives you?",
-                        "success looks good on you. what's the next big move?",
-                        "I appreciate someone who knows what they want. where are you headed?"
-                    ],
-                    parent: [
-                        "single parent and still making it look easy. that's impressive. how do you do it?",
-                        "your strength shows through your profile. what keeps you going?",
-                        "balancing parenthood and personal life takes skill. what's your secret?"
+                        "ambition looks good on you. what mountain are you climbing right now?",
+                        "successful and self-aware - dangerous combination. what's your secret?",
+                        "you clearly know where you're going. mind if I tag along?"
                     ]
                 },
                 genuine: {
-                    intellectual: [
-                        "your profile suggests depth over surface - refreshing. what's been on your mind lately?",
-                        "I appreciate someone who thinks before they speak. what are you curious about these days?",
-                        "you seem like someone who asks the right questions. what are you figuring out?"
-                    ],
-                    complicated: [
-                        "it's complicated - at least you're honest. want to talk about it or ignore it completely?",
-                        "complexity is interesting. what's your story?",
-                        "complicated usually means there's a good story. care to share?"
+                    all: [
+                        "your profile felt refreshingly real in a sea of filters. what's your actual story?",
+                        "you seem like someone who values authenticity. what matters most to you?",
+                        "genuine question: what made you smile today?"
                     ]
                 }
             },
-            response: {
-                funny: [
-                    "okay that was actually clever, wasn't expecting that",
-                    "damn you're actually funny, this is dangerous",
-                    "not me actually laughing at a dating app message",
-                    "well played. your turn to impress me again",
-                    "I'm supposed to play it cool but that was good",
-                    "stop being charming, I'm trying to have walls here"
-                ],
-                smooth: [
-                    "see this is why I messaged you",
-                    "you're making it hard to play it cool here",
-                    "I had a feeling you'd surprise me",
-                    "exactly the energy I was hoping for",
-                    "okay you've got my attention",
-                    "this conversation just got interesting"
-                ],
-                genuine: [
-                    "that's actually really interesting, tell me more",
-                    "I love how you think about things",
-                    "you're easy to talk to, you know that?",
-                    "this feels refreshingly real",
-                    "I appreciate you being genuine about that",
-                    "your honesty is refreshing in this app"
-                ]
+            response: [
+                "okay you're actually interesting. wasn't expecting that",
+                "well this conversation just got good",
+                "not me actually enjoying a dating app conversation for once",
+                "you're making it impossible to play it cool",
+                "this energy? immaculate. keep going"
+            ],
+            recovery: [
+                "wow I really just said that. ctrl+z isn't working. help",
+                "that was weird even for me. pretend I said something charming instead?",
+                "plot twist: that was a test and you passed. let's go with that",
+                "okay let me try that again but like... better"
+            ],
+            escalate: [
+                "this app conversation is great but your actual laugh would be better. coffee?",
+                "I'm thinking we graduate from pixels to person. you free this week?",
+                "weird suggestion but what if we continued this with actual voices?"
+            ],
+            deep: [
+                "what's something you believe that most people disagree with?",
+                "when did you realize you weren't who you thought you were?",
+                "what's the biggest risk you've taken that actually paid off?"
+            ],
+            flirty: [
+                "you're trouble aren't you? I can tell",
+                "this energy between us... you feel it too right?",
+                "careful, you're making me forget my smooth lines"
+            ],
+            compliment: [
+                "your energy in these messages is honestly infectious",
+                "you have this way of making conversation feel effortless",
+                "there's something really authentic about how you present yourself"
+            ],
+            random: [
+                "hypothetically, if we were in a zombie apocalypse, what's your survival skill?",
+                "quick: would you rather fight 100 duck-sized horses or 1 horse-sized duck?",
+                "random but genuine question: what's the last thing that made you genuinely happy?"
+            ],
+            comeback: [
+                "touché. you win this round but I'm coming back stronger",
+                "I like your energy. this is getting interesting",
+                "fair point. I appreciate the honesty"
+            ],
+            followup: [
+                "did netflix kidnap you or should I send a search party?",
+                "hey, been thinking about our conversation. how's your week going?",
+                "life got busy but you're worth circling back to. what's new?"
+            ]
+        };
+
+        // Special messages
+        const specialMessages = {
+            chaotic: [
+                "hypothetically if we were both furniture what would we be? I'm thinking beanbag meets anxiety",
+                "quick question: is soup a drink if you use a straw? this is important",
+                "I've been upside down for 20 minutes to get a new perspective on life. your profile still looks good"
+            ],
+            unhinged: [
+                "I've analyzed your profile for 23 minutes and determined we're cosmically compatible. the spreadsheet doesn't lie",
+                "listen I already told my mom about you so we kind of have to make this work",
+                "I've planned our first 17 dates. too much? probably. doing it anyway? absolutely"
+            ],
+            crackhead: [
+                "OKAY SO HEAR ME OUT *vibrating at high frequency* you me gas station sushi what could go wrong",
+                "i haven't slept in 72 hours but your profile gave me a second wind wassup",
+                "do you ever just ✨exist✨ because same anyway wanna fall in love or whatever"
+            ],
+            alien: [
+                "greetings human. your profile indicates suitable compatibility for earth dating rituals. shall we proceed?",
+                "my analysis of your bio suggests optimal genetic pairing. this is how humans flirt, correct?",
+                "earth customs confuse me but you seem worth understanding. teach me your ways?"
+            ],
+            serial_killer: [
+                "you have nice skin. I mean that in a normal way. coffee somewhere public?",
+                "I promise I'm normal. my therapist says so. anyway, favorite horror movie?",
+                "you look like you'd fit perfectly in my... life. yes, life. dinner?"
+            ],
+            time_traveler: [
+                "sorry if this is weird but we're married in 2047. thought we should meet?",
+                "fun fact: our third date goes really well. wait, shouldn't have said that",
+                "I'm from the future. we have some great stories. coffee to start?"
+            ],
+            trawler: [
+                "ahoy! 🦐 your profile caught my net like premium catch. what's your biggest haul been?",
+                "captain to captain, your vessel looks seaworthy. what profitable waters you sailing?",
+                "the tides of profit brought me here. ready to explore these entrepreneurial seas together?"
+            ]
+        };
+
+        // Testimonials
+        const testimonials = [
+            {
+                text: "I was skeptical about AI helping with dating, but this legitimately changed everything. My match rate went from maybe 2-3 per week to having actual quality conversations daily. The AI understands context and personality better than I expected. Best investment I've made in my dating life.",
+                author: "Jordan K., Software Engineer, 28"
             },
-            recovery: {
-                funny: [
-                    "okay that was weird even for me. take two?",
-                    "let's pretend that didn't happen and I'll try being normal",
-                    "plot twist: I'm actually smooth, that was just a test",
-                    "wow I really just said that. switching to airplane mode forever",
-                    "that came out wrong. unless... no definitely wrong. let me try again"
-                ],
-                genuine: [
-                    "that came out wrong. what I meant was...",
-                    "let me try that again without the awkward",
-                    "okay real talk, let's reset. hi, I'm interested and bad at this",
-                    "I promise I'm better in person. that was rough even for me",
-                    "can we pretend I started with something clever instead?"
-                ],
-                smooth: [
-                    "even I have off moments. let me redeem myself",
-                    "that wasn't my best work. fortunately I've got better material",
-                    "smooth recovery time: how about we forget that and focus on getting drinks?",
-                    "well that was embarrassing. good thing I'm cute right?",
-                    "technical difficulties. regularly scheduled charm will resume shortly"
-                ]
+            {
+                text: "The recovery mode is absolutely genius. I sent the most cringe message of my life, used the recovery mode, and not only did it save the conversation, we're actually dating now. She still brings up how smooth my recovery was. Worth every single penny.",
+                author: "Sam Rodriguez, Graphic Designer, 31"
             },
-            random: {
-                all: [
-                    "quick: would you rather fight 100 duck-sized horses or 1 horse-sized duck?",
-                    "hypothetically, if we were in a zombie apocalypse, what's your survival skill?",
-                    "confession: I've been trying to think of something cool to say for 10 minutes",
-                    "random but genuine question: what's the last thing that made you genuinely happy?",
-                    "plot twist: what if we just skipped the small talk entirely?",
-                    "here's my theory: everyone on this app is just winging it. thoughts?",
-                    "if you had to describe your life as a movie genre, what would it be?",
-                    "scale of 1-10 how much do you judge people who clap when the plane lands?",
-                    "what's your most controversial food opinion? I'll start: cereal is soup"
-                ]
+            {
+                text: "As someone who's genuinely terrible at texting and has mild social anxiety, this app saved my dating life. The AI adapts to different platforms perfectly - my Tinder messages are casual and fun, my Hinge messages are thoughtful. It's like having a dating coach who actually gets modern dating culture.",
+                author: "Morgan Davis, Teacher, 26"
             },
-            compliment: {
-                all: [
-                    "your energy in these messages is honestly infectious",
-                    "you have this way of making conversation feel effortless",
-                    "I really admire how genuine you're being on here",
-                    "your humor is exactly what I needed today",
-                    "you seem like someone who actually gets it, you know?",
-                    "there's something really authentic about how you present yourself"
-                ]
+            {
+                text: "Okay so I tried the chaotic neutral mode as a complete joke. Sent the weirdest message about being furniture and somehow ended up on a date with someone absolutely out of my league. We've been together for 4 months now. Sometimes chaos is the answer.",
+                author: "Casey Liu, Marketing Manager, 24"
+            },
+            {
+                text: "Been using BINDL for 2 months and I'm currently in the healthiest relationship I've ever had. The deep conversation prompts helped us connect on a real level. She always comments on how good I am at asking meaningful questions. The AI doesn't just help you get matches - it helps you build actual connections.",
+                author: "Blake Foster, Financial Analyst, 29"
+            },
+            {
+                text: "The gay mode is honestly perfect and understands queer dating culture better than any other app. It gets the subtle references, the communication style, everything. Finally an AI that doesn't assume everyone is straight. My matches actually comment on how refreshing my messages are.",
+                author: "River Chen, Artist, 27"
             }
-        };
+        ];
 
-        // Platform-specific tone adjustments
-        const platformTones = {
-            tinder: { casual: 0.8, emoji: 0.6, lowercase: 0.7 },
-            hinge: { thoughtful: 0.8, genuine: 0.7, questions: 0.8 },
-            bumble: { respectful: 0.8, ambitious: 0.6, clear: 0.7 },
-            grindr: { direct: 0.9, flirty: 0.8, brief: 0.7 },
-            her: { warm: 0.8, community: 0.7, authentic: 0.8 },
-            match: { serious: 0.8, formal: 0.6, detailed: 0.7 },
-            eharmony: { traditional: 0.8, serious: 0.9, marriage: 0.6 },
-            trawler: { maritime: 1.0, profit: 0.9, nautical: 1.0 },
-            dms: { casual: 0.9, reference: 0.6, social: 0.8 }
-        };
+        // Dating tips
+        const datingTips = [
+            "Messages with specific questions get 50% more responses than generic statements",
+            "Mentioning something from their profile increases reply rates by 40%",
+            "Tuesday at 9pm has the highest response rate across all dating apps",
+            "Humor beats pickup lines - funny messages get 3x more replies",
+            "Messages between 50-100 characters get 25% more responses",
+            "Sunday evening between 8-10pm has the most active users",
+            "Being genuine increases long-term success by 60%",
+            "Following up after 48-72 hours can revive 30% of dead conversations"
+        ];
 
-        // Enhanced testimonials pool (longer and more varied)
-        const testimonialPool = [
-            { 
-                text: "I was skeptical at first but this AI legitimately understands modern dating better than I do. My match rate went from maybe 2 per week to getting actual quality conversations daily. The personality modes are genius - finally messages that sound like me instead of some pickup artist wannabe.",
-                author: "Jordan K., 28"
-            },
-            {
-                text: "Used the recovery mode after I sent the most awkward message of my life. Not only did it save the conversation, we're actually dating now. She still brings up how smooth my 'recovery' was. If only she knew it was AI-assisted. Worth every penny.",
-                author: "Sam Rodriguez, 31"
-            },
-            {
-                text: "As someone who's genuinely terrible at texting, this saved my dating life. I went from getting ghosted constantly to having three dates lined up this week. The context awareness is incredible - it actually reads their bio and creates relevant messages.",
-                author: "Morgan D., 26"
-            },
-            {
-                text: "The unhinged modes are absolutely hilarious and somehow they actually work. Used chaotic neutral mode as a joke and ended up getting a date with someone way out of my league. They said I was 'refreshingly weird.' My friends think I hired a comedy writer.",
-                author: "Casey Liu, 24"
-            },
-            {
-                text: "Been using this for 2 months. Currently in a relationship with someone I met on Hinge. The deep conversation prompts helped us connect on a real level early on. She comments on how good I am at asking meaningful questions. Thanks BINDL!",
-                author: "Blake Foster, 29"
-            },
-            {
-                text: "The gay mode is honestly perfect and understands queer dating culture better than any other app I've tried. It gets the subtle references and communication style just right. Finally an AI that doesn't assume everyone is straight. Game changer for the community.",
-                author: "River Chen, 27"
-            },
-            {
-                text: "Single mom here - dating is already impossible with my schedule. This app helps me send quality messages when I actually have 5 minutes free. The parent mode suggestions are respectful and realistic. Met someone who actually understands my situation.",
-                author: "Sarah Mitchell, 34"
-            },
-            {
-                text: "I'm an engineer, not a wordsmith. This tool translates my thoughts into actual charming messages. The platform-specific adjustments are brilliant - my Tinder messages are casual, my Hinge ones are thoughtful. It's like having a dating coach in my pocket.",
-                author: "David Park, 30"
-            },
-            {
-                text: "The Trawler mode is weirdly effective. Started using it as a joke but the maritime money-making metaphors somehow work? Got a date with an actual CEO who found it hilarious and original. Still using sailing puns in our conversations.",
-                author: "Quinn Barrett, 32"
-            },
-            {
-                text: "Went from zero matches to having to be selective about who I respon
+        // Generate message function
+        function generateMessage(params) {
+            const { platform, personality, target, messageType } = params;
+            let message = "";
+            
+            // Check for special personalities
+            if (specialMessages[personality]) {
+                const messages = specialMessages[personality];
+                message = messages[Math.floor(Math.random() * messages.length)];
+            } else if (platform === 'trawler' && specialMessages.trawler) {
+                const messages = specialMessages.trawler;
+                message = messages[Math.floor(Math.random() * messages.length)];
+            } else {
+                // Normal message generation
+                if (messageType === 'opener' && messageDatabase.opener[personality]) {
+                    if (messageDatabase.opener[personality][target]) {
+                        const messages = messageDatabase.opener[personality][target];
+                        message = messages[Math.floor(Math.random() * messages.length)];
+                    } else if (messageDatabase.opener[personality].all) {
+                        const messages = messageDatabase.opener[personality].all;
+                        message = messages[Math.floor(Math.random() * messages.length)];
+                    }
+                } else if (Array.isArray(messageDatabase[messageType])) {
+                    const messages = messageDatabase[messageType];
+                    message = messages[Math.floor(Math.random() * messages.length)];
+                }
+            }
+            
+            // Fallback
+            if (!message) {
+                message = "hey, how's it going?";
+            }
+            
+            // Platform adjustments
+            if (platform === 'tinder' && Math.random() > 0.5) {
+                message = message.toLowerCase();
+            }
+            if (platform === 'grindr' && Math.random() > 0.5) {
+                message += ' 😏';
+            }
+            if (platform === 'her' && Math.random() > 0.5) {
+                message += ' 💕';
+            }
+            
+            return message;
+        }
+
+        // Initialize functions
+        function init() {
+            setRandomTip();
+            updateStats();
+            loadTestimonials();
+            setInterval(updateStats, 10000);
+        }
+
+        function setRandomTip() {
+            const tip = datingTips[Math.floor(Math.random() * datingTips.length)];
+            document.getElementById('randomTip').textContent = tip;
+        }
+
+        function updateStats() {
+            const users = Math.floor(Math.random() * 2500) + 1000;
+            document.getElementById('activeUsers').textContent = users.toLocaleString();
+            
+            if (Math.random() > 0.7) {
+                const currentText = document.getElementById('messagesGenerated').textContent;
+                const currentNum = parseInt(currentText.replace(/\D/g, '')) || 50000;
+                const newNum = currentNum + Math.floor(Math.random() * 10) + 1;
+                document.getElementById('messagesGenerated').textContent = newNum.toLocaleString() + '+';
+            }
+        }
+
+        function loadTestimonials() {
+            const container = document.getElementById('testimonialContainer');
+            const shuffled = [...testimonials].sort(() => Math.random() - 0.5);
+            const selected = shuffled.slice(0, 4);
+            
+            let html = '';
+            selected.forEach((testimonial, index) => {
+                html += '<div class="testimonial" style="animation-delay: ' + (index * 0.1) + 's">';
+                html += '<p>"' + testimonial.text + '"</p>';
+                html += '<div class="testimonial-author">- ' + testimonial.author + '</div>';
+                html += '</div>';
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Form submission
+        document.getElementById('messageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const params = {
+                yourGender: document.getElementById('yourGender').value,
+                theirGender: document.getElementById('theirGender').value,
+                platform: document.getElementById('platform').value,
+                personality: document.getElementById('personality').value,
+                target: document.getElementById('target').value,
+                messageType: document.getElementById('messageType').value,
+                context: document.getElementById('context').value
+            };
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            // Generate message after delay
+            setTimeout(function() {
+                const message = generateMessage(params);
+                
+                const isGayMode = (params.yourGender === params.theirGender && params.yourGender !== 'prefer_not_say') || 
+                                 params.platform === 'grindr' || params.platform === 'her';
+                
+                const isUnhinged = ['chaotic', 'unhinged', 'crackhead', 'alien', 'serial_killer', 'time_traveler'].includes(params.personality);
+                
+                // Update UI
+                document.getElementById('generatedMessage').textContent = message;
+                
+                const approachText = 'AI Approach: ' + params.personality + ' energy for ' + params.target + ' on ' + params.platform;
+                document.getElementById('messageApproach').textContent = approachText;
+                
+                // Special modes
+                document.getElementById('gayModeIndicator').style.display = isGayMode ? 'block' : 'none';
+                document.getElementById('disclaimer').style.display = isUnhinged ? 'block' : 'none';
+                
+                const messageElement = document.getElementById('generatedMessage');
+                if (isGayMode) {
+                    messageElement.classList.add('rainbow-text');
+                } else {
+                    messageElement.classList.remove('rainbow-text');
+                }
+                
+                if (isUnhinged) {
+                    messageElement.classList.add('unhinged');
+                } else {
+                    messageElement.classList.remove('unhinged');
+                }
+                
+                // Show result
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            }, 1500 + Math.random() * 1000);
+        });
+        
+        // Copy button
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const message = document.getElementById('generatedMessage').textContent;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(message).then(function() {
+                    document.getElementById('copyBtn').textContent = '✅ Copied!';
+                    setTimeout(function() {
+                        document.getElementById('copyBtn').textContent = '📋 Copy Message';
+                    }, 2000);
+                }).catch(function() {
+                    fallbackCopy(message);
+                });
+            } else {
+                fallbackCopy(message);
+            }
+        });
+        
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.top = '0';
+            textArea.style.left = '0';
+            textArea.style.width = '2em';
+            textArea.style.height = '2em';
+            textArea.style.padding = '0';
+            textArea.style.border = 'none';
+            textArea.style.outline = 'none';
+            textArea.style.boxShadow = 'none';
+            textArea.style.background = 'transparent';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                document.getElementById('copyBtn').textContent = '✅ Copied!';
+                setTimeout(function() {
+                    document.getElementById('copyBtn').textContent = '📋 Copy Message';
+                }, 2000);
+            } catch (err) {
+                console.error('Copy failed:', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
